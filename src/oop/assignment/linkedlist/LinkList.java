@@ -1,5 +1,8 @@
 package oop.assignment.linkedlist;
 
+import oop.assignment.linkedlist.exceptions.NoNextElementException;
+import oop.assignment.linkedlist.exceptions.NullHeadException;
+
 public class LinkList<T> {
     private Element head;
     private Element ptr;
@@ -22,7 +25,22 @@ public class LinkList<T> {
         }
     }
 
+    public void append(T obj){
+        if(isEmpty()){
+            add(obj);
+        } else {
+            Element tmpptr = ptr;
+            moveTo(size() - 1);
+            add(obj);
+            ptr = tmpptr;
+        }
+    }
+
     public void next(){
+        if(isEmpty()){
+            throw new NullHeadException();
+        }
+
         if(!ptr.hasNext()){
             throw new NoNextElementException();
         } else {
@@ -35,6 +53,10 @@ public class LinkList<T> {
     }
 
     public void remove(){
+        if(isEmpty()){
+            throw new NullHeadException();
+        }
+
         if(!ptr.hasNext()){
             ptr.setObj(null);
         } else {
@@ -44,6 +66,10 @@ public class LinkList<T> {
     }
 
     public void remove(int index){
+        if(isEmpty()){
+            throw new NullHeadException();
+        }
+
         Element tmpptr = ptr;
         pointToHead();
         for(int i = 0; i < index; i++){
@@ -58,6 +84,10 @@ public class LinkList<T> {
     }
 
     public int search(T obj){
+        if(isEmpty()){
+            throw new NullHeadException();
+        }
+
         Element tmpptr = ptr;
         pointToHead();
         for(int i = 0; i < size(); i ++){
@@ -71,10 +101,15 @@ public class LinkList<T> {
     }
 
     public int size(){
+        if(isEmpty()) {
+            return 0;
+        }
+
         Element tmpptr = ptr;
         pointToHead();
-        int size = 0;
-        while(ptr.hasNext()){
+        int size = 1;
+
+        while(ptr.hasNext() && ptr.getNext().getObj() != null){
             next();
             size++;
         }
@@ -83,6 +118,9 @@ public class LinkList<T> {
     }
 
     public T get(){
+        if(isEmpty()){
+            throw new NullHeadException();
+        }
         return ptr.getObj();
     }
 
@@ -95,10 +133,24 @@ public class LinkList<T> {
     }
 
     public void moveTo(int index){
+        if(isEmpty()){
+            throw new NullHeadException();
+        }
+
         pointToHead();
         for(int i = 0; i < index; i++){
             next();
         }
+    }
+
+    public boolean isEmpty(){
+        if(head == null) {
+            return true;
+        }
+        if(head.getObj() == null) {
+            return true;
+        }
+        return false;
     }
 
     private class Element{
