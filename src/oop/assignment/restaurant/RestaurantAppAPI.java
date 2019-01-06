@@ -1,12 +1,11 @@
 package oop.assignment.restaurant;
 
+import oop.assignment.restaurant.exceptions.IncompatibleOrderTypeException;
 import oop.assignment.restaurant.objects.*;
 import oop.assignment.restaurant.observables.OrderList;
 import oop.assignment.restaurant.observables.RestaurantMap;
 import oop.assignment.restaurant.observers.OrderListObserver;
 import oop.assignment.restaurant.observers.RestaurantMapObserver;
-
-import java.util.List;
 
 public class RestaurantAppAPI {
     private RestaurantMap restaurantMap;
@@ -20,6 +19,9 @@ public class RestaurantAppAPI {
         restaurantMap = new RestaurantMap();
         restaurantMapObserver = new RestaurantMapObserver(restaurantMap);
         restaurantMap.register(restaurantMapObserver);
+
+        orderList = null;
+        orderListObserver = null;
     }
 
     public static RestaurantAppAPI getInstance(){
@@ -42,10 +44,17 @@ public class RestaurantAppAPI {
         orderList.register(orderListObserver);
     }
 
-    public RestaurantOrder startNewOrder(String restaurantName, String orderType){
-        RestaurantOrder restaurantOrder = new RestaurantOrder(OrderType.convertString(orderType), restaurantName);
-        orderList.addOrder(restaurantOrder);
-        return restaurantOrder;
+    public RestaurantOrder startNewOrder(String restaurantName, String orderTypeText){
+        Restaurant restaurant = getRestaurant(restaurantName);
+        OrderType orderType = OrderType.convertString(orderTypeText);
+
+        if(OrderType.areCompatible(restaurant.getOrderTypesOffered(), orderType)) {
+            RestaurantOrder restaurantOrder = new RestaurantOrder(orderType, restaurant);
+            orderList.addOrder(restaurantOrder);
+            return restaurantOrder;
+        } else {
+            throw new IncompatibleOrderTypeException(restaurantName, orderType);
+        }
     }
 
     public double closeOrderList(){
@@ -55,7 +64,20 @@ public class RestaurantAppAPI {
 
         double total = orderListObserver.getTotal();
         orderList = null;
+        orderListObserver = null;
         return total;
+    }
+
+    public double getTotal(){
+        return restaurantMapObserver.getTotal();
+    }
+
+    public boolean isOrderListNull(){
+        return orderList == null;
+    }
+
+    public boolean isOrderListEmpty(){
+        return orderList == null || orderList.size() == 0;
     }
 
     private void addOrder(RestaurantOrder restaurantOrder){

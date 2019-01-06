@@ -3,27 +3,16 @@ package oop.assignment.restaurant.objects;
 import oop.assignment.restaurant.exceptions.NonExistentOrderTypeException;
 
 public enum OrderType {
-    DELIVERY("delivery"),
-    TAKEAWAY("takeaway"),
-    DELIVERYANDTAKEAWAY("both");
-
-    private final String text;
-
-    OrderType(String text){
-        this.text = text;
-    }
-
-    @Override
-    public String toString() {
-        return text;
-    }
+    DELIVERY,
+    TAKEAWAY,
+    BOTH;
 
     public boolean isDelivery(){
-        return this == OrderType.DELIVERY || this == OrderType.DELIVERYANDTAKEAWAY;
+        return this == OrderType.DELIVERY || this == OrderType.BOTH;
     }
 
     public boolean isTakeaway(){
-        return this == OrderType.TAKEAWAY || this == OrderType.DELIVERYANDTAKEAWAY;
+        return this == OrderType.TAKEAWAY || this == OrderType.BOTH;
     }
 
     public static boolean areCompatible(OrderType orderType1, OrderType orderType2){
@@ -32,8 +21,9 @@ public enum OrderType {
     }
 
     public static OrderType convertString(String orderTypeText){
+        String orderTypeTextUpper = orderTypeText.toUpperCase();
         for(OrderType orderType: OrderType.values()){
-            if(orderType.toString().equals(orderTypeText)){
+            if(orderType.name().equals(orderTypeTextUpper)){
                 return orderType;
             }
         }

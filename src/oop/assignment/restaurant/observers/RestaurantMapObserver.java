@@ -24,7 +24,7 @@ public class RestaurantMapObserver implements IObserver {
     }
 
     private Restaurant findHighestRevenueRestaurant(){
-        Restaurant tempRestaurant = new Restaurant("dummy", OrderType.DELIVERYANDTAKEAWAY);
+        Restaurant tempRestaurant = new Restaurant("dummy", OrderType.BOTH);
         for(Restaurant restaurant : restaurantMap.getRestaurantMap().values()){
             if(restaurant.getRevenue() > tempRestaurant.getRevenue()){
                 tempRestaurant = restaurant;
@@ -33,8 +33,8 @@ public class RestaurantMapObserver implements IObserver {
         return tempRestaurant;
     }
 
-    private int calculateTotal(){
-        int total = 0;
+    private double calculateTotal(){
+        double total = 0;
 
         for(Restaurant restaurant: restaurantMap.getRestaurantMap().values()){
             total += restaurant.getRevenue();

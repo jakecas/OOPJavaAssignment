@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Main {
-    private static final String DEFAULT_TEST_FILE = "defaulttextfile.txt";
+    private static final String DEFAULT_TEST_FILE = "defaulttestfile.txt";
 
     public static void main(String[] args) {
         RestaurantAppController restaurantAppController = RestaurantAppController.getInstance();
@@ -15,12 +15,16 @@ public class Main {
         try(BufferedReader br = new BufferedReader(new FileReader(DEFAULT_TEST_FILE))){
             String line;
             while((line = br.readLine()) != null){
+                System.out.println(line);
                 restaurantAppController.executeLine(lineSplitter(line));
             }
         } catch(IOException ioe){
             ioe.printStackTrace();
             System.exit(-1);
         }
+
+        restaurantAppController.printTotal();
+        restaurantAppController.printHighestRevenuRestaurant();
     }
 
     public static List<String> lineSplitter(String line){

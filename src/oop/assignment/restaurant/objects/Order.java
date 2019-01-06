@@ -1,5 +1,8 @@
 package oop.assignment.restaurant.objects;
 
+import oop.assignment.exceptions.InvalidFormatException;
+import oop.assignment.restaurant.exceptions.InvalidOrderTypeException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +11,9 @@ public class Order {
     private List<MenuItem> itemList;
 
     public Order(OrderType orderType){
+        if(orderType == OrderType.BOTH){
+            throw new InvalidOrderTypeException(orderType);
+        }
         this.orderType = orderType;
         this.itemList = new ArrayList<>();
     }

@@ -4,15 +4,19 @@ import oop.assignment.restaurant.objects.Order;
 import oop.assignment.restaurant.objects.OrderType;
 
 public class RestaurantOrder extends Order {
-    private String restaurantName;
+    private Restaurant restaurant;
 
-    public RestaurantOrder(OrderType orderType, String restaurantName) {
+    public RestaurantOrder(OrderType orderType, Restaurant restaurant) {
         super(orderType);
-        this.restaurantName = restaurantName;
+        this.restaurant = restaurant;
+    }
+
+    public Restaurant getRestaurant(){
+        return restaurant;
     }
 
     public String getRestaurantName() {
-        return restaurantName;
+        return restaurant.getName();
     }
 
 }
