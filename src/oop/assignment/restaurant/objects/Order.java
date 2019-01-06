@@ -4,19 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
-    private Restaurant restaurant;
+    private OrderType orderType;
     private List<MenuItem> itemList;
 
-    public Order(Restaurant restaurant){
-        this.restaurant = restaurant;
+    public Order(OrderType orderType){
+        this.orderType = orderType;
         this.itemList = new ArrayList<>();
     }
 
-    public void orderItems(List<String> itemNames){
-        for(String itemName: itemNames) {
-            itemList.add(restaurant.orderItem(itemName));
-        }
+    public OrderType getOrderType(){
+        return orderType;
     }
+
+    public void addItem(MenuItem menuItem){
+        itemList.add(menuItem);
+    }
+
 
     public double calculatePrice(){
         double total = 0;

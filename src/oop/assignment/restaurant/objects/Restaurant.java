@@ -1,36 +1,60 @@
 package oop.assignment.restaurant.objects;
 
+import oop.assignment.restaurant.exceptions.IncompatibleOrderTypeException;
 import oop.assignment.restaurant.exceptions.NonExistentMenuItemException;
+import oop.assignment.restaurant.observables.OrderList;
+import oop.assignment.restaurant.observers.OrderListObserver;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Restaurant {
     private String name;
-    private boolean delivery;
-    private boolean takeaway;
-    private List<MenuItem> menuItemList;
-    private double revenue;
+    private OrderType orderTypesOffered;
+    private Map<String, MenuItem> menuItemMap;
+    private OrderList<Order> orderList;
+    private OrderListObserver orderListObserver;
 
-    public Restaurant(String name, boolean delivery, boolean takeaway, double revenue) {
+    public Restaurant(String name, OrderType orderTypesOffered) {
         this.name = name;
-        this.delivery = delivery;
-        this.takeaway = takeaway;
-        this.menuItemList = new ArrayList<>();
-        this.revenue = revenue;
+        this.orderTypesOffered = orderTypesOffered;
+        this.menuItemMap = new HashMap<>();
+        this.orderList = new OrderList<>();
+        this.orderListObserver = new OrderListObserver(orderList);
+        orderList.register(orderListObserver);
     }
 
-    public MenuItem orderItem(String itemName){
-        for(MenuItem item: menuItemList){
-            if(item.getName().equals(itemName)){
-                revenue += item.getPrice();
-                return item;
-            }
+    public String getName() {
+        return name;
+    }
+
+    public OrderType getOrderTypesOffered(){
+        return orderTypesOffered;
+    }
+
+    public void addMenuItem(MenuItem menuItem){
+        menuItemMap.put(menuItem.getName(), menuItem);
+    }
+
+    public MenuItem getMenuItem(String itemName){
+        MenuItem tmpMenuItem = menuItemMap.get(itemName);
+
+        if(tmpMenuItem == null) {
+            throw new NonExistentMenuItemException(itemName);
+        } else {
+            return tmpMenuItem;
         }
-        throw new NonExistentMenuItemException(itemName);
     }
 
     public double getRevenue() {
-        return revenue;
+        return orderListObserver.getTotal();
+    }
+
+    public void addOrder(Order order){
+        if(OrderType.areCompatible(this.getOrderTypesOffered(), order.getOrderType())) {
+            orderList.addOrder(order);
+        } else {
+            throw new IncompatibleOrderTypeException(this.getName(), order.getOrderType());
+        }
     }
 }

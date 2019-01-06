@@ -1,12 +1,10 @@
 package oop.assignment.restaurant.observers;
 
-import oop.assignment.linkedlist.LinkList;
-import oop.assignment.restaurant.objects.Order;
 import oop.assignment.restaurant.observables.OrderList;
 
 public class OrderListObserver implements IObserver {
-    OrderList orderList;
-    double total;
+    private OrderList orderList;
+    private double total;
 
     public OrderListObserver(OrderList orderList){
         this.orderList = orderList;
@@ -14,12 +12,11 @@ public class OrderListObserver implements IObserver {
     }
 
     private double calculateTotal(){
-        LinkList<Order> orderLinkList = orderList.getOrderLinkList();
-        double newTotal = 0;
-        for(int i = 0; i < orderLinkList.size(); i++){
-            newTotal += orderLinkList.get(i).calculatePrice();
+        double total = 0;
+        for(int i = 0; i < orderList.size(); i++){
+            total += orderList.getOrder(i).calculatePrice();
         }
-        return newTotal;
+        return total;
     }
 
     public double getTotal() {
@@ -28,6 +25,6 @@ public class OrderListObserver implements IObserver {
 
     @Override
     public void update() {
-        total = calculateTotal();
+        this.total = calculateTotal();
     }
 }
