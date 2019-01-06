@@ -1,6 +1,5 @@
 package oop.assignment.restaurant.observables;
 
-import oop.assignment.linkedlist.LinkList;
 import oop.assignment.restaurant.objects.Order;
 import oop.assignment.restaurant.objects.Restaurant;
 import oop.assignment.restaurant.observers.IObserver;
@@ -17,6 +16,19 @@ public class RestaurantMap implements IObservable {
     public RestaurantMap(){
         restaurantMap = new HashMap<>();
         observers = new ArrayList<>();
+    }
+
+    public void addRestaurant(Restaurant restaurant){
+        restaurantMap.put(restaurant.getName(), restaurant);
+    }
+
+    public Restaurant getRestaurant(String name){
+        return restaurantMap.get(name);
+    }
+
+    public void addOrder(String restaurantName, Order order){
+        restaurantMap.get(restaurantName).addOrder(order);
+        notifyObservers();
     }
 
     public Map<String, Restaurant> getRestaurantMap() {
