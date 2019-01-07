@@ -2,6 +2,7 @@ package oop.assignment.restaurant;
 
 import oop.assignment.restaurant.exceptions.EmptyOrderListException;
 import oop.assignment.restaurant.exceptions.IncompatibleOrderTypeException;
+import oop.assignment.restaurant.exceptions.InvalidOrderStateException;
 import oop.assignment.restaurant.objects.*;
 import oop.assignment.restaurant.observables.OrderList;
 import oop.assignment.restaurant.observables.RestaurantMap;
@@ -40,12 +41,20 @@ public class RestaurantMapController {
     }
 
     public void startNewOrderList(){
+        if(orderList != null){
+            throw new InvalidOrderStateException("An order list exists", "creating an order list");
+        }
+
         orderList = new OrderList<>();
         orderListObserver = new OrderListObserver(orderList);
         orderList.register(orderListObserver);
     }
 
     public void startNewOrder(String restaurantName, String orderTypeText){
+        if(orderList == null){
+            throw new InvalidOrderStateException("Order list is null", "starting a new order");
+        }
+
         Restaurant restaurant = getRestaurant(restaurantName);
         OrderType orderType = OrderType.convertString(orderTypeText);
 
@@ -66,10 +75,17 @@ public class RestaurantMapController {
     }
 
     public void closeCurrentOrder(){
+        if(orderList == null){
+            throw new InvalidOrderStateException("Order list is null", "closing an order");
+        }
         orderList.closeOrder();
     }
 
     public double closeOrderList(){
+        if(orderList == null){
+            throw new InvalidOrderStateException("Order list is null", "closing an order list");
+        }
+
         for(int i = 0; i < orderList.size(); i ++){
             addOrder(orderList.getOrder(i));
         }
