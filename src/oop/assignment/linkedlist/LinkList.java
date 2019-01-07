@@ -66,15 +66,8 @@ public class LinkList<T> {
     }
 
     public void remove(int index){
-        if(isEmpty()){
-            throw new NullHeadException();
-        }
-
         Element tmpptr = ptr;
-        pointToHead();
-        for(int i = 0; i < index; i++){
-            next();
-        }
+        moveTo(index);
         remove();
         ptr = tmpptr;
     }

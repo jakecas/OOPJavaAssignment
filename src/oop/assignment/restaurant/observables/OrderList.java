@@ -24,7 +24,7 @@ public class OrderList<T extends Order> implements IObservable {
         if(orderOpen){
             throw new InvalidOrderStateException("An order is open", "creating a new order");
         }
-        orderList.add(order);
+        orderList.append(order);
         orderOpen = true;
         notifyObservers();
     }
