@@ -2,7 +2,7 @@ package oop.assignment.restaurant;
 
 import oop.assignment.restaurant.exceptions.EmptyOrderListException;
 import oop.assignment.restaurant.exceptions.IncompatibleOrderTypeException;
-import oop.assignment.restaurant.exceptions.InvalidOrderStateException;
+import oop.assignment.restaurant.exceptions.InvalidStateException;
 import oop.assignment.restaurant.objects.*;
 import oop.assignment.restaurant.observables.OrderList;
 import oop.assignment.restaurant.observables.RestaurantMap;
@@ -13,6 +13,7 @@ public class RestaurantMapController {
     private RestaurantMap restaurantMap;
     private RestaurantMapObserver restaurantMapObserver;
     private OrderList<RestaurantOrder> orderList;
+    private Restaurant restaurant;
     private OrderListObserver orderListObserver;
 
     private static final RestaurantMapController SINGLETON = new RestaurantMapController();
@@ -30,19 +31,31 @@ public class RestaurantMapController {
         return SINGLETON;
     }
 
-    public Restaurant addRestaurant(String name, String orderTypesOfferedText){
-        Restaurant restaurant = new Restaurant(name, OrderType.convertString(orderTypesOfferedText));
+    public void addRestaurant(String name, String orderTypesOfferedText){
+        if(restaurant != null){
+            throw new InvalidStateException("A restaurant session is open", "creating a restaurant");
+        }
+        restaurant = new Restaurant(name, OrderType.convertString(orderTypesOfferedText));
         restaurantMap.addRestaurant(restaurant);
-        return restaurant;
     }
 
-    public void addMenuItem(String restaurantName, String menuItemName, double price){
-        restaurantMap.getRestaurant(restaurantName).addMenuItem(new MenuItem(menuItemName, price));
+    public void addMenuItem(String menuItemName, double price){
+        if(restaurant == null){
+            throw new InvalidStateException("Restaurant is null", "adding an item to the restaurant");
+        }
+        restaurant.addMenuItem(new MenuItem(menuItemName, price));
+    }
+
+    public void closeCurrentRestaurant(){
+        if(restaurant == null){
+            throw new InvalidStateException("Restaurant is null", "closing the restaurant");
+        }
+        restaurant = null;
     }
 
     public void startNewOrderList(){
         if(orderList != null){
-            throw new InvalidOrderStateException("An order list exists", "creating an order list");
+            throw new InvalidStateException("An order list exists", "creating an order list");
         }
 
         orderList = new OrderList<>();
@@ -52,7 +65,7 @@ public class RestaurantMapController {
 
     public void startNewOrder(String restaurantName, String orderTypeText){
         if(orderList == null){
-            throw new InvalidOrderStateException("Order list is null", "starting a new order");
+            throw new InvalidStateException("Order list is null", "starting a new order");
         }
 
         Restaurant restaurant = getRestaurant(restaurantName);
@@ -76,14 +89,14 @@ public class RestaurantMapController {
 
     public void closeCurrentOrder(){
         if(orderList == null){
-            throw new InvalidOrderStateException("Order list is null", "closing an order");
+            throw new InvalidStateException("Order list is null", "closing an order");
         }
         orderList.closeOrder();
     }
 
     public double closeOrderList(){
         if(orderList == null){
-            throw new InvalidOrderStateException("Order list is null", "closing an order list");
+            throw new InvalidStateException("Order list is null", "closing an order list");
         }
 
         for(int i = 0; i < orderList.size(); i ++){
@@ -98,6 +111,10 @@ public class RestaurantMapController {
 
     public double getTotal(){
         return restaurantMapObserver.getTotal();
+    }
+
+    public boolean isRestaurantSessionOpen(){
+        return restaurant != null;
     }
 
     public boolean isOrderListNull(){

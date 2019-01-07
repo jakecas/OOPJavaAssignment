@@ -12,11 +12,9 @@ import java.util.List;
 public class RestaurantAppConnector {
     private static final RestaurantAppConnector SINGLETON = new RestaurantAppConnector();
 
-    private Restaurant restaurant;
     private RestaurantMapController restaurantMapController;
 
     private RestaurantAppConnector(){
-        this.restaurant = null;
         restaurantMapController = RestaurantMapController.getInstance();
     }
 
@@ -61,25 +59,25 @@ public class RestaurantAppConnector {
     private void beginRestaurant(List<String> args){
         checkArgumentNumber(args.size(), 3, "create restaurant");
 
-        if(restaurant != null){
+        if(restaurantMapController.isRestaurantSessionOpen()){
             throw new MisplacedCommandException("The current restaurant needs to be closed before another can be opened.");
         }
         if(!restaurantMapController.isOrderListNull()){
             throw new MisplacedCommandException("An order is being edited, a restaurant cannot be created..");
         }
 
-        restaurant = restaurantMapController.addRestaurant(args.get(1), args.get(2));
+        restaurantMapController.addRestaurant(args.get(1), args.get(2));
     }
 
     private void addItem(List<String> args){
         checkArgumentNumber(args.size(), 3, "create menu item");
 
-        if(restaurant == null){
+        if(!restaurantMapController.isRestaurantSessionOpen()){
             throw new MisplacedCommandException("No restaurant is open to attach item to.");
         }
 
         try {
-            restaurantMapController.addMenuItem(restaurant.getName(), args.get(1), Double.parseDouble(args.get(2)));
+            restaurantMapController.addMenuItem(args.get(1), Double.parseDouble(args.get(2)));
         } catch(NumberFormatException e){
             throw new InvalidFormatException("'" + args.get(2) + "' not a valid price for '" + args.get(1) + "'.");
         }
@@ -88,17 +86,17 @@ public class RestaurantAppConnector {
     private void endRestaurant(List<String> args){
         checkArgumentNumber(args.size(), 1, "end restaurant creation");
 
-        if(restaurant == null){
+        if(!restaurantMapController.isRestaurantSessionOpen()){
             throw new MisplacedCommandException("No restaurant is open to end restaurant creation.");
         }
 
-        restaurant = null;
+        restaurantMapController.closeCurrentRestaurant();
     }
 
     private void beginOrderList(List<String> args){
         checkArgumentNumber(args.size(), 1, "begin order list");
 
-        if(restaurant != null){
+        if(restaurantMapController.isRestaurantSessionOpen()){
             throw new MisplacedCommandException("The current restaurant needs to be closed before an order list can be opened.");
         }
         if(!restaurantMapController.isOrderListNull()){

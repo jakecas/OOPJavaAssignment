@@ -1,7 +1,7 @@
 package oop.assignment.restaurant.observables;
 
 import oop.assignment.linkedlist.LinkList;
-import oop.assignment.restaurant.exceptions.InvalidOrderStateException;
+import oop.assignment.restaurant.exceptions.InvalidStateException;
 import oop.assignment.restaurant.objects.MenuItem;
 import oop.assignment.restaurant.observers.IObserver;
 import oop.assignment.restaurant.objects.Order;
@@ -22,7 +22,7 @@ public class OrderList<T extends Order> implements IObservable {
 
     public void addOrder(T order){
         if(orderOpen){
-            throw new InvalidOrderStateException("An order is open", "creating a new order");
+            throw new InvalidStateException("An order is open", "creating a new order");
         }
         orderList.append(order);
         orderOpen = true;
@@ -39,7 +39,7 @@ public class OrderList<T extends Order> implements IObservable {
 
     public void addItemToCurrentOrder(MenuItem menuItem){
         if(!orderOpen){
-            throw new InvalidOrderStateException("No order is open", "adding an item to the order");
+            throw new InvalidStateException("No order is open", "adding an item to the order");
         }
         orderList.get(size()-1).addItem(menuItem);
         notifyObservers();
@@ -47,7 +47,7 @@ public class OrderList<T extends Order> implements IObservable {
 
     public void closeOrder(){
         if(!orderOpen){
-            throw new InvalidOrderStateException("No order is open", "closing the order");
+            throw new InvalidStateException("No order is open", "closing the order");
         }
 
         orderOpen = false;
