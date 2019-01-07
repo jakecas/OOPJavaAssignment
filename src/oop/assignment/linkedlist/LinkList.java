@@ -144,13 +144,7 @@ public class LinkList<T> {
     }
 
     public boolean isEmpty(){
-        if(head == null) {
-            return true;
-        }
-        if(head.getObj() == null) {
-            return true;
-        }
-        return false;
+        return head == null || head.getObj() == null;
     }
 
     private class Element{
@@ -186,10 +180,7 @@ public class LinkList<T> {
 
 
         private boolean hasNext(){
-            if(next != null) {
-                return true;
-            }
-            return false;
+            return next != null;
         }
 
     }

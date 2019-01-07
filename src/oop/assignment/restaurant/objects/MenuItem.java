@@ -1,8 +1,8 @@
 package oop.assignment.restaurant.objects;
 
 public class MenuItem {
-    String name;
-    double price;
+    private String name;
+    private double price;
 
     public MenuItem(String name, double price){
         this.name = name;

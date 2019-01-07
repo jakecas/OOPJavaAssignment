@@ -1,6 +1,5 @@
 package oop.assignment.restaurant.objects;
 
-import oop.assignment.exceptions.InvalidFormatException;
 import oop.assignment.restaurant.exceptions.InvalidOrderTypeException;
 
 import java.util.ArrayList;

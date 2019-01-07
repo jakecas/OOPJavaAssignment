@@ -1,5 +1,6 @@
 package oop.assignment.restaurant;
 
+import oop.assignment.restaurant.exceptions.EmptyOrderListException;
 import oop.assignment.restaurant.exceptions.IncompatibleOrderTypeException;
 import oop.assignment.restaurant.objects.*;
 import oop.assignment.restaurant.observables.OrderList;
@@ -7,15 +8,15 @@ import oop.assignment.restaurant.observables.RestaurantMap;
 import oop.assignment.restaurant.observers.OrderListObserver;
 import oop.assignment.restaurant.observers.RestaurantMapObserver;
 
-public class RestaurantAppAPI {
+public class RestaurantMapController {
     private RestaurantMap restaurantMap;
     private RestaurantMapObserver restaurantMapObserver;
     private OrderList<RestaurantOrder> orderList;
     private OrderListObserver orderListObserver;
 
-    private static final RestaurantAppAPI SINGLETON = new RestaurantAppAPI();
+    private static final RestaurantMapController SINGLETON = new RestaurantMapController();
 
-    private RestaurantAppAPI(){
+    private RestaurantMapController(){
         restaurantMap = new RestaurantMap();
         restaurantMapObserver = new RestaurantMapObserver(restaurantMap);
         restaurantMap.register(restaurantMapObserver);
@@ -24,7 +25,7 @@ public class RestaurantAppAPI {
         orderListObserver = null;
     }
 
-    public static RestaurantAppAPI getInstance(){
+    public static RestaurantMapController getInstance(){
         return SINGLETON;
     }
 
@@ -44,17 +45,28 @@ public class RestaurantAppAPI {
         orderList.register(orderListObserver);
     }
 
-    public RestaurantOrder startNewOrder(String restaurantName, String orderTypeText){
+    public void startNewOrder(String restaurantName, String orderTypeText){
         Restaurant restaurant = getRestaurant(restaurantName);
         OrderType orderType = OrderType.convertString(orderTypeText);
 
         if(OrderType.areCompatible(restaurant.getOrderTypesOffered(), orderType)) {
             RestaurantOrder restaurantOrder = new RestaurantOrder(orderType, restaurant);
             orderList.addOrder(restaurantOrder);
-            return restaurantOrder;
         } else {
             throw new IncompatibleOrderTypeException(restaurantName, orderType);
         }
+    }
+
+    public void addItemToCurrentOrder(String itemName){
+        if(isOrderListEmpty()){
+            throw new EmptyOrderListException("could not add item to order");
+        }
+        Restaurant restaurant = orderList.getOrder(orderList.size()-1).getRestaurant();
+        orderList.addItemToCurrentOrder(restaurant.getMenuItem(itemName));
+    }
+
+    public void closeCurrentOrder(){
+        orderList.closeOrder();
     }
 
     public double closeOrderList(){

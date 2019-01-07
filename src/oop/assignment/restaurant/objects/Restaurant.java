@@ -53,6 +53,7 @@ public class Restaurant {
     public void addOrder(Order order){
         if(OrderType.areCompatible(this.getOrderTypesOffered(), order.getOrderType())) {
             orderList.addOrder(order);
+            orderList.closeOrder();
         } else {
             throw new IncompatibleOrderTypeException(this.getName(), order.getOrderType());
         }
