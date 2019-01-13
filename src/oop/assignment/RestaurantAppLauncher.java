@@ -15,18 +15,16 @@ public class RestaurantAppLauncher {
     public static void main(String[] args) {
         RestaurantAppConnector restaurantAppConnector = RestaurantAppConnector.getInstance();
 
-        try(BufferedReader br = new BufferedReader(new FileReader(DEFAULT_TEST_FILE))){
+        String filename = (args.length == 1) ? args[0] : DEFAULT_TEST_FILE;
+        try(BufferedReader br = new BufferedReader(new FileReader(filename))){
             String line;
             while((line = br.readLine()) != null){
                 System.out.println(line);
                 try {
                     restaurantAppConnector.executeLine(lineSplitter(line));
-                } catch(MalformedCommandException e){
+                } catch(MalformedCommandException | RestaurantException e){
                     System.out.println(e.getMessage());
-                    System.exit(-1);
-                } catch (RestaurantException e){
-                    System.out.println(e.getMessage());
-                    System.exit(-2);
+                    System.out.println("Attempting to continue execution.");
                 }
             }
         } catch(IOException ioe){
