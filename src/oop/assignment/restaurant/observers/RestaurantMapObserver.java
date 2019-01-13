@@ -13,6 +13,8 @@ public class RestaurantMapObserver implements IObserver {
         this.restaurantMap = restaurantMap;
         this.highestRevenueRestaurant = null;
         this.total = 0;
+
+        restaurantMap.register(this);
     }
 
     public Restaurant getHighestRevenueRestaurant() {

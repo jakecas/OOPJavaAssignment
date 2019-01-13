@@ -21,7 +21,6 @@ public class Restaurant {
         this.menuItemMap = new HashMap<>();
         this.orderList = new OrderList<>();
         this.orderListObserver = new OrderListObserver(orderList);
-        orderList.register(orderListObserver);
     }
 
     public String getName() {

@@ -9,25 +9,24 @@ import oop.assignment.restaurant.observables.RestaurantMap;
 import oop.assignment.restaurant.observers.OrderListObserver;
 import oop.assignment.restaurant.observers.RestaurantMapObserver;
 
-public class RestaurantMapController {
+public class RestaurantAppController {
     private RestaurantMap restaurantMap;
     private RestaurantMapObserver restaurantMapObserver;
     private OrderList<RestaurantOrder> orderList;
     private Restaurant restaurant;
     private OrderListObserver orderListObserver;
 
-    private static final RestaurantMapController SINGLETON = new RestaurantMapController();
+    private static final RestaurantAppController SINGLETON = new RestaurantAppController();
 
-    private RestaurantMapController(){
+    private RestaurantAppController(){
         restaurantMap = new RestaurantMap();
         restaurantMapObserver = new RestaurantMapObserver(restaurantMap);
-        restaurantMap.register(restaurantMapObserver);
 
         orderList = null;
         orderListObserver = null;
     }
 
-    public static RestaurantMapController getInstance(){
+    public static RestaurantAppController getInstance(){
         return SINGLETON;
     }
 
@@ -60,7 +59,6 @@ public class RestaurantMapController {
 
         orderList = new OrderList<>();
         orderListObserver = new OrderListObserver(orderList);
-        orderList.register(orderListObserver);
     }
 
     public void startNewOrder(String restaurantName, String orderTypeText){
@@ -94,7 +92,7 @@ public class RestaurantMapController {
         orderList.closeOrder();
     }
 
-    public double closeOrderList(){
+    public double closeOrderList()  {
         if(orderList == null){
             throw new InvalidStateException("Order list is null", "closing an order list");
         }
@@ -134,6 +132,9 @@ public class RestaurantMapController {
     }
 
     public Restaurant getHighestRevenueRestaurant(){
+        if(restaurantMapObserver == null) {
+            return null;
+        }
         return restaurantMapObserver.getHighestRevenueRestaurant();
     }
 

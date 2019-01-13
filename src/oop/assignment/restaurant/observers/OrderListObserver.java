@@ -9,6 +9,8 @@ public class OrderListObserver implements IObserver {
     public OrderListObserver(OrderList orderList){
         this.orderList = orderList;
         total = 0;
+
+        orderList.register(this);
     }
 
     private double calculateTotal(){
