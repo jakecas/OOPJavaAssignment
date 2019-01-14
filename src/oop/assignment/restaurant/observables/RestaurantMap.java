@@ -1,5 +1,6 @@
 package oop.assignment.restaurant.observables;
 
+import oop.assignment.restaurant.exceptions.NonExistentRestaurantException;
 import oop.assignment.restaurant.objects.Order;
 import oop.assignment.restaurant.objects.Restaurant;
 import oop.assignment.restaurant.observers.IObserver;
@@ -23,7 +24,11 @@ public class RestaurantMap implements IObservable {
     }
 
     public Restaurant getRestaurant(String name){
-        return restaurantMap.get(name);
+        Restaurant restaurant = restaurantMap.get(name);
+        if(restaurant == null){
+            throw new NonExistentRestaurantException(name);
+        }
+        return restaurant;
     }
 
     public void addOrder(String restaurantName, Order order){

@@ -24,7 +24,6 @@ public class RestaurantAppLauncher {
                     restaurantAppConnector.executeLine(lineSplitter(line));
                 } catch(MalformedCommandException | RestaurantException e){
                     System.out.println(e.getMessage());
-                    System.out.println("Attempting to continue execution.");
                 }
             }
         } catch(IOException ioe){

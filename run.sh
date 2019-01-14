@@ -1,1 +1,1 @@
-java -cp target oop.assignment.RestaurantAppLauncher $1
+java -cp out oop.assignment.RestaurantAppLauncher $1
