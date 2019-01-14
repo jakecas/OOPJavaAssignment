@@ -1,4 +1,4 @@
-package oop.assignment.linkedlist;
+package oop.assignment.linkedlist.exceptions;
 
 public class NoNextElementException extends RuntimeException{
     public NoNextElementException(){

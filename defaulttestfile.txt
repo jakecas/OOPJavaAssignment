@@ -1,0 +1,43 @@
+BeginRestaurant HouseOfPizza both
+Item Margherita 7.50
+Item Hawaiian 8.90
+Item Mexican 9.90
+Item Vegetarian 9.50
+Item Fungi 8.10
+Item Capricciosa 8.90
+Item BBQChicken 9.10
+EndRestaurant
+
+BeginRestaurant SweetTooth takeaway
+Item VanillaIceCream 1.50
+Item FrozenYoghurt 2.00
+Item StrawberrySundae 2.90
+Item BlackForestGateaux 4.50
+Item ApplePie 2.50
+Item Licorice 0.45
+EndRestaurant
+
+BeginOrderList
+
+BeginOrder HouseOfPizza takeaway
+OrderItem Mexican
+OrderItem Mexican
+OrderItem BBQChicken
+EndOrder
+
+BeginOrder SweetTooth takeaway
+OrderItem ApplePie
+EndOrder
+
+EndOrderList
+
+BeginOrderList
+
+BeginOrder SweetTooth takeaway
+OrderItem StrawberrySundae
+OrderItem StrawberrySundae
+OrderItem StrawberrySundae
+OrderItem BlackForestGateaux
+EndOrder
+
+EndOrderList

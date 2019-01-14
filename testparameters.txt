@@ -1,0 +1,30 @@
+BeginRestaurant HouseOfPizza both
+Item Margherita 7.50
+Item badnumber xx.xx
+Item toofewparameters
+Item too many parameters
+EndRestaurant invalid
+EndRestaurant
+
+BeginRestaurant invalidordertype all
+BeginRestaurant toofewparameters
+BeginRestaurant too many parameters
+
+BeginOrderList invalid
+BeginOrderList
+
+BeginOrder toofewparameters
+BeginOrder too many parameters
+BeginOrder nonexistentrestaurant takeaway
+BeginOrder HouseOfPizza both
+
+BeginOrder HouseOfPizza takeaway
+OrderItem
+OrderItem too many parameters
+OrderItem nonexistentitem
+EndOrder invalid
+EndOrder
+
+EndOrderList invalid
+EndOrderList
+
